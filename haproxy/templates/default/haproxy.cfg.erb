@@ -107,11 +107,8 @@ backend nodejs_app_servers
 backend nodejs_app_servers_mqtt
   mode tcp
   balance <%= node[:haproxy][:balance] %>
-  option redispatch
-  option forwardfor
-  option httpchk <%= node[:haproxy][:health_check_method] %> <%= node[:haproxy][:health_check_url] %>
   <% node[:haproxy][:nodejs_backends].each do |backend| -%>
-  server <%= backend['name'] %> <%= backend['ip'] %>:1883 weight <%= backend['backends'] || 10 %> maxconn <%= backend['backends'] * node[:haproxy][:maxcon_factor_nodejs_app] %> check inter <%= node[:haproxy][:check_interval] %>
+  server <%= backend['name'] %> <%= backend['ip'] %>:1883 weight <%= backend['backends'] || 10 %> maxconn <%= backend['backends'] * node[:haproxy][:maxcon_factor_nodejs_app] %>
   <% end -%>
 <% end -%>
 
@@ -336,17 +333,6 @@ frontend mqtt-in
   mode tcp
   bind :1883
 
-  # all domains of node.js applications
-  <% node[:haproxy][:nodejs_applications].each do |app_name, app_config| -%>
-    <% app_config['domains'].each do |domain| -%>
-  acl nodejs_applications_mqtt hdr_end(host) -i <%= domain %>
-    <% end -%>
-  <% end -%>
-
-  <% unless node[:haproxy][:nodejs_applications].empty? || node[:haproxy][:nodejs_backends].empty? -%>
-  use_backend nodejs_app_servers_mqtt if nodejs_applications_mqtt
-  <% end -%>
-  
   <% if !node[:haproxy][:nodejs_backends].empty? -%>
   default_backend nodejs_app_servers_mqtt
   <% end -%>
