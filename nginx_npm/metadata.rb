@@ -1,0 +1,5 @@
+name        "nginx_npm"
+description "Runs npm on nginx"
+maintainer  "Octoblu"
+license     "Apache 2.0"
+version     "9.0.0"
