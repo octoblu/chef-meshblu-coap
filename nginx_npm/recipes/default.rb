@@ -18,6 +18,15 @@
 # limitations under the License.
 #
 
+script "npm install npm" do
+  interpreter "bash"
+  user "root"
+  cwd "/tmp"
+  code <<-EOH
+    npm install -g npm
+  EOH
+end
+
 node[:deploy].each do |application, deploy|
   script "npm install" do
     interpreter "bash"
