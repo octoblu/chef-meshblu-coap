@@ -22,7 +22,7 @@ node[:deploy].each do |application, deploy|
   script "npm install" do
     interpreter "bash"
     user deploy[:user]
-    cwd deploy[:deploy_to]
+    cwd "#{deploy[:deploy_to]}/current"
     code <<-EOH
       npm install
     EOH
