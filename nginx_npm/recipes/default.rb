@@ -18,8 +18,6 @@
 # limitations under the License.
 #
 
-package "nginx_npm"
-
 node[:deploy].each do |application, deploy|
   script "npm install" do
     interpreter "bash"
