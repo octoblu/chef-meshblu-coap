@@ -2,6 +2,4 @@ check host node_web_app_<%= @application_name %> with address 127.0.0.1
   start program = "/bin/sh -c 'cd <%= @deploy[:deploy_to] %>/current; /usr/bin/env NODE_PATH=<%= @deploy[:deploy_to] %>/current/node_modules:<%= @deploy[:deploy_to] %>/current <% (node[:environment_variables] || {}).merge(@deploy[:environment_variables] || {}).each do |name,value| -%><%= name %>=<%= value %> <% end -%> /usr/local/bin/node coap-server.js >> log/server.log'"
   stop program  = "/usr/bin/pkill -f 'node coap-server.js'"
   if failed port 5683 type udp
-    request /
-    with timeout 10 seconds
     then restart
